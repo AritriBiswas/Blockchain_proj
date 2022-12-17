@@ -1,10 +1,8 @@
 import React from 'react';
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import "./CreateFundPage.css";
 import useEth from "../../contexts/EthContext/useEth";
-import Navbar from "../../components/Navbar/Navbar";
-import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 
 
 export default function CreateFundPage() {
@@ -14,27 +12,18 @@ export default function CreateFundPage() {
     const [minAmountToDonate, setMinAmountToDonate] = useState("");
     const [discription, setDiscription] = useState("");
     const { state } = useEth();
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate(); 
+   
+   
 
-    useEffect(() => {
-        setIsLoading(true);
-        if (state.contract) {
-            setIsLoading(false);
-        }
-    }, [state.contract]);
+    // useEffect(() => {
+    //     setIsLoading(true);
+    //     if (state.contract) {
+    //         setIsLoading(false);
+    //     }
+    // }, [state.contract]);
 
     const handleSubmit = async () => {
-        // let availContract = await state.contract.methods
-        //     .availableContracts()
-        //     .call();
-        // console.log("available contracts: ", availContract);
-
-        //  address payable _charityowner,
-        // string memory _charityname,
-        // uint256 _requiredamount,
-        // string memory _funddescription,
-        // uint256 _minamount
+        
         try {
             await state.contract.methods
                 .createFund(
@@ -44,9 +33,9 @@ export default function CreateFundPage() {
                     discription,
                     minAmountToDonate
                 ).send();
-                // .send({ from: state.accounts[0] });
+                
 
-            navigate("/");
+            
         } catch (err) {
             console.error(err);
         }
@@ -121,16 +110,14 @@ export default function CreateFundPage() {
                             />
                         </label>
                     </form>
-                    {isLoading ? (
+                   
                         <button
                             className="create-fund-btn"
                             onClick={handleSubmit}
                         >
                             Create
                         </button>
-                    ) : (
-                        <h1 className="loading">Loading...</h1>
-                    )}
+                   
                 </div>
             </div>
   )
