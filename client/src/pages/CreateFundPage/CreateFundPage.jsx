@@ -1,41 +1,45 @@
-import React from 'react';
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./CreateFundPage.css";
 import useEth from "../../contexts/EthContext/useEth";
+import Navbar from "../../components/Navbar/Navbar";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-
-
-export default function CreateFundPage() {
+const CreateFundPage = () => {
     const [charityName, setCharityName] = useState("");
     const [ownerAddress, setOwnerAddress] = useState("");
     const [amountRequired, setAmountRequired] = useState("");
     const [minAmountToDonate, setMinAmountToDonate] = useState("");
     const [discription, setDiscription] = useState("");
     const { state } = useEth();
-   
-   
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     if (state.contract) {
-    //         setIsLoading(false);
-    //     }
-    // }, [state.contract]);
+    useEffect(() => {
+        setIsLoading(true);
+        if (state.contract) {
+            setIsLoading(false);
+        }
+    }, [state.contract]);
 
-    const handleSubmit = async () => {
-        
+    const handleSubmit = async (event) => {
+
         try {
-            await state.contract.methods
-                .createFund(
-                    ownerAddress,
-                    charityName,
-                    amountRequired,
-                    discription,
-                    minAmountToDonate
-                ).send();
-                
 
-            
+            // address _charityowner, string memory _charityname, uint256 _requiredamount, string memory _funddescription, uint256 _minamount
+
+            await state.contract.methods.createFund(
+                ownerAddress,
+                charityName,
+                amountRequired,
+                discription,
+                minAmountToDonate
+            ).send({from: state.accounts[0]});
+
+            // console.log(state.accounts[0]);
+
+            // navigate("/");
         } catch (err) {
             console.error(err);
         }
@@ -47,10 +51,18 @@ export default function CreateFundPage() {
         setDiscription("");
     };
 
+    return (
+        <section
+            style={{
+                marginTop: 0,
 
-
-  return (
-    <div className="form-container">
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                height: "100vh",
+                width: "100vw",
+            }}
+        >
+            <div className="form-container">
                 <h1 className="create-fund-heading">
                     Create Your <span className="main-heading1">Own</span> Fund
                 </h1>
@@ -110,15 +122,20 @@ export default function CreateFundPage() {
                             />
                         </label>
                     </form>
-                   
+                    {!isLoading ? (
                         <button
                             className="create-fund-btn"
                             onClick={handleSubmit}
                         >
                             Create
                         </button>
-                   
+                    ) : (
+                        <h1 className="loading">Loading...</h1>
+                    )}
                 </div>
             </div>
-  )
-}
+        </section>
+    );
+};
+
+export default CreateFundPage;

@@ -1,11 +1,12 @@
-import React from 'react';
-import { Link } from "react-router-dom";
+import React from "react";
 import "./LandingPage.css";
+import { Link } from "react-router-dom";
 
-export default function LandingPage() {
-  return (
-    <>
-    <section
+
+const LandingPage = () => {
+    return (
+        <>
+            <section
                 className="landingpage"
                 style={{
                     background: `url("/backround.jpg")`,
@@ -32,6 +33,8 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
-    </>
-  )
-}
+        </>
+    );
+};
+
+export default LandingPage;
