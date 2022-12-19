@@ -1,13 +1,25 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import "./Navbar.css"
+import useEth from '../../contexts/EthContext/useEth';
+import { Link } from 'react-router-dom';
 
-export default function Navbar() {
+const Navbar = ({path}) => {
+  const [address,setAddress] = useState("none");
+  const {state} = useEth();
+  useEffect(() => {
+    let curraddress = "none";
+    if(state.accounts) curraddress =  state.accounts[0];
+    setAddress(curraddress);
+    // console.log(state.accounts);
+  }, [state.accounts])
+  
   return (
-    <nav className="navbar">
-          
+      <nav className="navbar">
+          <img src={path} alt="eth-raiser" className="logo" />
           <ul className='navList'>
-          <li>
+              <li>
                   <Link to="/">Home</Link>
               </li>
               <li>
@@ -16,8 +28,9 @@ export default function Navbar() {
               <li>
                   <Link to="/createfund">Create Charity</Link>
               </li>
-             
           </ul>
       </nav>
-  )
+  );
 }
+
+export default Navbar
