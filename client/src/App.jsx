@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import OngoingPage from "./pages/Ongoing/OngoingPage";
 import CreateFundPage from "./pages/CreateFundPage/CreateFundPage";
+import Description from "./pages/Description/Description";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/ongoing" element={<OngoingPage />} />
                     <Route path="/createfund" element={<CreateFundPage />} />
+                    <Route path="/desc/:id" element={<Description />} />
                 </Routes>
             </BrowserRouter>
         </EthProvider>
